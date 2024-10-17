@@ -41,7 +41,7 @@ sudo apt install -y git build-essential gcc g++ fakeroot libncurses5-dev libssl-
     xterm trace-cmd tcpdump flex bison rsync python3-venv ltrace sysdig kmod xdp-tools net-tools \
     openssh-client openssh-server strace bpftrace tmux gdb xterm attr busybox curl vim htop openssl \
     genisoimage pciutils clang llvm libvirt-daemon-system libvirt-clients qemu-kvm \
-    libbpf-dev linux-tools-common libbpfcc-dev libbpfcc binutils-dev dwarves"
+    libbpf-dev linux-tools-common libbpfcc-dev libbpfcc binutils-dev dwarves libcap-dev"
 ```
 
 ```cmake
