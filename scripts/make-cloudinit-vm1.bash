@@ -4,7 +4,9 @@
 HOSTNAME="sriov-vm1"
 USERNAME="rosa"
 PASSWORD="rosalab"
-PACKAGES="curl vim htop"  # Add your predefined packages here
+
+PACKAGES=""
+
 CLOUD_INIT_DIR="cloud-init-data"
 ISO_NAME="../seeds/vm1-seed.iso"
 
