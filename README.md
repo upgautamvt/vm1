@@ -100,19 +100,17 @@ Steps to follow
 
 # To install Mellanox driver in host machine (this is your root machine, which hosts vm<X> and qemu vm)
 
-```cmake
-upgautam@deimos:~/Downloads/bpfabsorb/vm1/scripts$ sudo cat /etc/netplan/01-netcfg.yaml
-network:
-version: 2
-renderer: networkd
-ethernets:
-enp1s0f0np0:
-dhcp4: no
-addresses:
-- 192.168.101.1/24
-mtu: 9000
-version: 2
 
+```yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens4:
+      dhcp4: no
+      addresses:
+        - 192.168.100.10/24
+      mtu: 9000
 ```
 
 ```cmake
