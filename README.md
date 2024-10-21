@@ -40,9 +40,10 @@ sudo apt install -y git gcc-multilib build-essential gcc g++ cpio fakeroot libnc
 
 ```cmake
 git clone ggit@github.com:rosalab/bpfabsorb.git
+git submodule update --init --recursive
 cd bpfabsorb/linux # linux root directory
 
-# do these 4 lines; otherwise make fails
+# do these 4 lines; otherwise make fails. This is required only if you install real linux 
 scripts/config --disable SYSTEM_TRUSTED_KEYS
 scripts/config --disable SYSTEM_REVOCATION_KEYS
 scripts/config --set-str CONFIG_SYSTEM_TRUSTED_KEYS ""
@@ -57,7 +58,7 @@ echo $? # make sure nothing wrong
 make headers_install
 
 cd tools/lib/bpf
-make 
+make
 
 cd tools/bpf/bpftool
 make
@@ -67,7 +68,7 @@ sudo ln -s /usr/include/x86_64-linux-gnu/asm /usr/include/asm
 
 sudo make modules_install
 suo make install
-reboot
+reboot #  you must be able to boot with your compiled custom kernel
 ```
 
 # If you are using rosa network testbed
@@ -100,7 +101,6 @@ Steps to follow
 
 # To install Mellanox driver in host machine (this is your root machine, which hosts vm<X> and qemu vm)
 
-
 ```yaml
 network:
   version: 2
@@ -109,7 +109,7 @@ network:
     ens4:
       dhcp4: no
       addresses:
-        - 192.168.100.10/24
+        - 192.168.100.1/24
       mtu: 9000
 ```
 
