@@ -67,7 +67,7 @@ make
 sudo ln -s /usr/include/x86_64-linux-gnu/asm /usr/include/asm
 
 sudo make modules_install
-suo make install
+sudo make install
 reboot #  you must be able to boot with your compiled custom kernel
 ```
 
