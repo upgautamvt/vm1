@@ -39,17 +39,18 @@ sudo apt install -y git gcc-multilib build-essential gcc g++ cpio fakeroot libnc
 ```
 
 ```cmake
-git clone ggit@github.com:rosalab/bpfabsorb.git
+git clone git@github.com:rosalab/bpfabsorb.gi
+git submodule update --init --recursive
 cd bpfabsorb/linux # linux root directory
+cat /boot/config-$(uname -r) > .config # get the .config file from your running kernel
 
-# do these 4 lines; otherwise make fails
+# do these 4 lines; otherwise make fails. This is required only if you install real linux 
 scripts/config --disable SYSTEM_TRUSTED_KEYS
 scripts/config --disable SYSTEM_REVOCATION_KEYS
 scripts/config --set-str CONFIG_SYSTEM_TRUSTED_KEYS ""
 scripts/config --set-str CONFIG_SYSTEM_REVOCATION_KEYS ""
 
-#copy .config from running kernel (where you are right now)
-
+make oldconfig
 
 
 fakeroot make -j`nproc` # compiles linux
@@ -57,7 +58,7 @@ echo $? # make sure nothing wrong
 make headers_install
 
 cd tools/lib/bpf
-make 
+make
 
 cd tools/bpf/bpftool
 make
@@ -66,8 +67,8 @@ make
 sudo ln -s /usr/include/x86_64-linux-gnu/asm /usr/include/asm
 
 sudo make modules_install
-suo make install
-reboot
+sudo make install
+reboot #  you must be able to boot with your compiled custom kernel
 ```
 
 # If you are using rosa network testbed
@@ -100,19 +101,16 @@ Steps to follow
 
 # To install Mellanox driver in host machine (this is your root machine, which hosts vm<X> and qemu vm)
 
-```cmake
-upgautam@deimos:~/Downloads/bpfabsorb/vm1/scripts$ sudo cat /etc/netplan/01-netcfg.yaml
+```yaml
 network:
-version: 2
-renderer: networkd
-ethernets:
-enp1s0f0np0:
-dhcp4: no
-addresses:
-- 192.168.101.1/24
-mtu: 9000
-version: 2
-
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens4:
+      dhcp4: no
+      addresses:
+        - 192.168.100.1/24
+      mtu: 9000
 ```
 
 ```cmake
@@ -142,6 +140,20 @@ echo "0000:<domain:bus.device>" | sudo tee /sys/bus/pci/drivers/vfio-pci/bind
 
 lspci -nnk -d <vender id, device i>
 
+```
+
+```cmake
+Example
+cat /sys/class/net/enp1s0f0np0/device/sriov_numvfs
+sudo su
+echo 1 > /sys/class/net/enp1s0f0np0/device/sriov_numvfs
+lspci -nn | grep Mellanox
+modprobe vfio-pci
+echo "15b3 1014" | sudo tee /sys/bus/pci/drivers/vfio-pci/new_id
+echo "0000:01:00.2" | sudo tee /sys/bus/pci/devices/0000:01:00.2/driver/unbind
+echo "0000:01:00.2" | sudo tee /sys/bus/pci/drivers/vfio-pci/bind
+
+lspci -nnk -d <vender id, device i>
 ```
 
 Next step is the launch vm<X> and use your VFIO from withing vm<X>.
